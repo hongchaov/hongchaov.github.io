@@ -73,6 +73,8 @@ var _hmt = _hmt || [];
 		<nav class="header-smart-menu">
     		
     			
+    			<a q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友情链接</a>
+    			
             
     			
     			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
@@ -325,6 +327,8 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     
       
+      
+      
     
       
       
@@ -336,9 +340,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     
       
+      <li style="width: 50%" q-on="click: openSlider(e, 'friends')"><a href="javascript:void(0)" q-class="active:friends">友情链接</a></li>
+      
         
       
-      <li style="width: 100%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">关于我</a></li>
       
         
     </ul>
@@ -346,6 +352,26 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
   <div class="tools-wrap">
     
 
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="https://space.bilibili.com/384495859" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>B站链接</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://blog.csdn.net/qq_42444944/article/details/90320322" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>CSDN链接</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://github.com/hongchaov" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github链接</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
     
 
     
