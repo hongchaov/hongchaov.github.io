@@ -6,19 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://hongchaov.com">
-  <title>Tag: pid控制 | hongchao</title>
+  <title>pid板球系统的一些问题 | hongchao</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="电气与电子系学生一名">
-<meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
-<meta property="og:type" content="website">
-<meta property="og:title" content="hongchao">
-<meta property="og:url" content="http://hongchaov.com/tags/pid控制/index.html">
+  <meta name="description" content="整个板球系统分为两个部分： 1.图像处理： 图像处理利用了树莓派-OpenCV进行图像处理，将小球坐标进行实时反馈，使小球实际坐标和目标坐标进行对比，对偏差进行pid运算，计算出pwm值从而用来控制舵机。 图像处理的难点在于：（1）怎么读取小球的坐标，可以利用面积法，将镜像中的面积小于一个值的物体提取出来（也可以根据颜色识别，不过这个对小球颜色要求很高，不能反光）（2）难点2在于树莓派和单片机的通">
+<meta name="keywords" content="pid控制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pid板球系统的一些问题">
+<meta property="og:url" content="http://hongchaov.com/2019/05/22/板球控制系统pid笔记/index.html">
 <meta property="og:site_name" content="hongchao">
-<meta property="og:description" content="电气与电子系学生一名">
+<meta property="og:description" content="整个板球系统分为两个部分： 1.图像处理： 图像处理利用了树莓派-OpenCV进行图像处理，将小球坐标进行实时反馈，使小球实际坐标和目标坐标进行对比，对偏差进行pid运算，计算出pwm值从而用来控制舵机。 图像处理的难点在于：（1）怎么读取小球的坐标，可以利用面积法，将镜像中的面积小于一个值的物体提取出来（也可以根据颜色识别，不过这个对小球颜色要求很高，不能反光）（2）难点2在于树莓派和单片机的通">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20180709132543265?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JpdWJpdWJpdWJpdTIzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2019-05-22T03:30:29.902Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hongchao">
-<meta name="twitter:description" content="电气与电子系学生一名">
+<meta name="twitter:title" content="pid板球系统的一些问题">
+<meta name="twitter:description" content="整个板球系统分为两个部分： 1.图像处理： 图像处理利用了树莓派-OpenCV进行图像处理，将小球坐标进行实时反馈，使小球实际坐标和目标坐标进行对比，对偏差进行pid运算，计算出pwm值从而用来控制舵机。 图像处理的难点在于：（1）怎么读取小球的坐标，可以利用面积法，将镜像中的面积小于一个值的物体提取出来（也可以根据颜色识别，不过这个对小球颜色要求很高，不能反光）（2）难点2在于树莓派和单片机的通">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180709132543265?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JpdWJpdWJpdWJpdTIzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
     <link rel="alternative" href="/atom.xml" title="hongchao" type="application/atom+xml">
   
@@ -164,36 +167,38 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-板球控制系统pid笔记" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      pid板球系统的一些问题
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/05/22/板球控制系统pid笔记/" class="archive-article-date">
+
+        
+        <a href="/2019/05/22/板球控制系统pid笔记/" class="archive-article-date">
   	<time datetime="2019-05-22T03:30:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/05/22/板球控制系统pid笔记/">pid板球系统的一些问题</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>整个板球系统分为两个部分：</p>
+<p>1.图像处理：</p>
+<p>图像处理利用了树莓派-OpenCV进行图像处理，将小球坐标进行实时反馈，使小球实际坐标和目标坐标进行对比，对偏差进行pid运算，计算出pwm值从而用来控制舵机。</p>
+<p>图像处理的难点在于：<br>（1）怎么读取小球的坐标，可以利用面积法，将镜像中的面积小于一个值的物体提取出来（也可以根据颜色识别，不过这个对小球颜色要求很高，不能反光）<br>（2）难点2在于树莓派和单片机的通信，如何将坐标传给单片机，可以利用的是串口通信，将树莓派的坐标加上帧头帧尾，然后在单片机这边进行解码，就可以在单片机上面读取到小球的实时坐标。<br>2.pid的计算<br>pid运算是仿照着上个项目做的直流电机的调速系统的位置环写的，通过这个项目我发现了历年电赛好多共同点，板球系统，倒立摆，激光打靶的原理都是一样的，只不过是反馈的方式发生了变化而已，所以做这些项目的前提一定是将反馈的信号准确读取，这个是系统稳定工作的前提。<br>说一下做的时候遇到的一个问题，小球到达二号位置时，本来是在位置停止3秒再到5号位置，但是实际却是到达三号位置时，程序一直卡死，找原因找了很久才发现延时的时候程序跳不出来，一直在延时循环，  无奈最后自己写了一个延时函数  没有用HAL库里面的延时函数。<br>图片: <img src="https://img-blog.csdn.net/20180709132543265?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JpdWJpdWJpdWJpdTIzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>转自:<br><a href="https://blog.csdn.net/biubiubiubiu233/article/details/80968096" target="_blank" rel="noopener">https://blog.csdn.net/biubiubiubiu233/article/details/80968096</a></p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -205,116 +210,116 @@ var _hmt = _hmt || [];
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://hongchaov.com/2019/05/22/板球控制系统pid笔记/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/05/22/PID算法简介/" class="archive-article-date">
-  	<time datetime="2019-05-22T03:01:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/22/PID算法简介/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">pid算法简介</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/05/22/PID算法简介/">pid算法简介</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/26/pid控制入门笔记（1）/" class="archive-article-date">
-  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/26/pid控制入门笔记（1）/">pid控制算法入门笔记（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
   
 
-    
+  
+  <div id="SOHUCS" sid="板球控制系统pid笔记"></div> 
+<script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js"></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: "cysX3aGWt",
+        conf: "prod_1dcda447175aada96edcdb7e412338fa"
+    });
+</script>
+
+  
+
+  
+
+  
 
 
           </div>
@@ -337,9 +342,9 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
