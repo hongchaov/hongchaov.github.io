@@ -166,6 +166,93 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-电子设计大赛-板球系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/22/电子设计大赛-板球系统/">电子设计大赛-板球控制系统</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/22/电子设计大赛-板球系统/" class="archive-article-date">
+  	<time datetime="2019-05-22T05:01:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我参加电赛的作品，与李庆生、陈勃翰组队，他们俩负责材料采购、机械设计、平台搭建等，我负责代码部分的编写，最终获得北京市二等奖。</p>
+<p>题目是板球系统设计，板球系统即为：在一个正方形板上放置一个小球，控制板的倾斜来使小球在不落下的前提下做规定动作。</p>
+<p>要想控制小球，首先要获取小球的实时位置，这里最简单的方法就是DCMI摄像头。但是我们电赛前并没有准备摄像头。。。看着其他组直接拿出早已买好的鹰眼摄像头我们有点慌了，但是比赛只有3天，不能拖了。最后我当机立断，放弃直接用STM32+DCMI摄像头的方式，改为用树莓派+USB摄像头，于是乎把我在宿舍墙上挂了半年的树莓派卸了下来。。。再去超市买了个USB摄像头。这时又出现一个问题，既然都用树莓派了，那还要不要STM32？从功能上讲，树莓派足以胜任一切，时间和技术上也没问题，但是从比赛规则和传统来说，电赛这种比赛好像一般都是用51、AVR、STM32这种单片机的吧，这时候你突然用一个装着LINUX操作系统的东西，就感觉有点犯规。。。所以为了求稳不被判犯规，我们保留了STM32作为主控制器，树莓派就只作为图像处理部分，树莓派和STM32之间用串口通讯。</p>
+<p>于是我们的最终方案设计为树莓派+STM32：</p>
+<ul>
+<li>板子选择较轻的纸板，涂上白色颜料，小球涂上黑色颜料，对比强烈一些好让程序分辨。</li>
+<li>树莓派中，使用OPENCV将USB摄像头获取的图像转化为灰度图，并经由高斯滤波、霍夫圆等处理获取图像中出现的圆形，再根据位置和大小的限定条件进行筛选，确定小球的位置，通过串口发送至STM32。</li>
+<li>用STM32完成整个系统的控制，采用双环PID算法，内环为角度环，控制板子的倾斜角，外环为位置环，控制小球在纸板上的位置。</li>
+<li>机械结构采用分别在X、Y轴的两个直流电机，加上橡皮绳（陈勃翰同学搞到的，我也不知道该叫什么）制作的，由陈勃翰设计。</li>
+<li>采用12864屏幕显示一些系统信息，比如第几动作、小球坐标等。<br>github:<a href="https://github.com/plutojia/Ball-Plate-System" target="_blank" rel="noopener">https://github.com/plutojia/Ball-Plate-System</a></li>
+</ul>
+<p>因为当时走的比较着急，都没来得及拍视频和照片。。到了把系统拆了一半的时候才想起来拍几张照片留个纪念。以下是一些遗迹照片：</p>
+<p><img src="https://img-blog.csdn.net/20180709204934949?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdn.net/20180709204945611?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"></p>
+<h2 id><a href="#" class="headerlink" title=" "></a> <img src="https://img-blog.csdn.net/20180709205011784?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"></h2><p>作者：plutojia<br>来源：CSDN<br>原文：<a href="https://blog.csdn.net/mingzhiqing/article/details/80977145" target="_blank" rel="noopener">https://blog.csdn.net/mingzhiqing/article/details/80977145</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/22/电子设计大赛-板球系统/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-板球控制系统pid笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -496,98 +583,6 @@ return(iIncpid);                         //返回增量值
 
 
   
-    <article id="post-windows 远程连接登录树莓派桌面" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/26/windows 远程连接登录树莓派桌面/">树莓派远程登录</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/26/windows 远程连接登录树莓派桌面/" class="archive-article-date">
-  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"><a href="#刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短" class="headerlink" title="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"></a>刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短</h5><p>1.树莓派官方的操作系统默认是不支持windows远程登录功能的，需要安装xrdp,具体操作是树莓派开发板上电连接好网络后，ssh登录到树莓派，执行命令</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> purge tightvnc xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> install tightvncserver xrdp</span><br></pre></td></tr></table></figure>
-<p>第二条命令执行时可能会出错，很正常：</p>
-<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><h4 id="初次使用树莓派系统时，默认用户是pi-，密码为raspberry。"><a href="#初次使用树莓派系统时，默认用户是pi-，密码为raspberry。" class="headerlink" title="初次使用树莓派系统时，默认用户是pi ，密码为raspberry。"></a>初次使用树莓派系统时，默认用户是pi ，密码为raspberry。</h4><h4 id="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"><a href="#要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）" class="headerlink" title="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"></a>要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
-<h4 id="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"><a href="#说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等" class="headerlink" title="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"></a>说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等</h4><h4 id="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"><a href="#执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。" class="headerlink" title="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"></a>执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。</h4><h4 id="接着输入下面命令，用来解锁root账户"><a href="#接着输入下面命令，用来解锁root账户" class="headerlink" title="接着输入下面命令，用来解锁root账户"></a>接着输入下面命令，用来解锁root账户</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd --unlock root</span><br></pre></td></tr></table></figure>
-<h4 id="用下面命令切换到root管理员"><a href="#用下面命令切换到root管理员" class="headerlink" title="用下面命令切换到root管理员"></a>用下面命令切换到root管理员</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
-<h4 id="会提示输入密码"><a href="#会提示输入密码" class="headerlink" title="会提示输入密码"></a>会提示输入密码</h4><p>2.安装完成后执行命令sudo /etc/init.d/xrdp restart 重启xrdp服务，输入命令netstat  -tnl ，检查3350 3389 5910 这三个端口处于LISTEN，一般就没问题了。<br>3.打开windows远程桌面连接（开始-&gt;附件-&gt;桌面连接）,输入树莓派开发的IP地址，点击连接。</p>
-<p>图片: <img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=918019f1b2014a90813e47b599763971/8b13632762d0f7031e18339f03fa513d2797c5cf.jpg" alt="Alt"><br>4.如下登录界面输入登陆名和密码（默认pi 和raspberry）<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=35aff47ac23d70cf4cfaab05c8ddd1ba/9f510fb30f2442a793a25be6da43ad4bd01302c0.jpg" alt="Alt"><br>5.成功登录树莓派系统的图形桌面<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=9681218848166d223877149c76220945/e850352ac65c103890396881b9119313b07e892a.jpg" alt="Alt"><br>本文章转自：<br>百度文库<br><a href="https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">树莓派</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/26/windows 远程连接登录树莓派桌面/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-pid控制入门笔记（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -762,6 +757,98 @@ categories: 技术</code><ul>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/05/26/建立个人网站之后，怎末添加标签的问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-windows 远程连接登录树莓派桌面" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/26/windows 远程连接登录树莓派桌面/">树莓派远程登录</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/26/windows 远程连接登录树莓派桌面/" class="archive-article-date">
+  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"><a href="#刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短" class="headerlink" title="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"></a>刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短</h5><p>1.树莓派官方的操作系统默认是不支持windows远程登录功能的，需要安装xrdp,具体操作是树莓派开发板上电连接好网络后，ssh登录到树莓派，执行命令</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> purge tightvnc xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> install tightvncserver xrdp</span><br></pre></td></tr></table></figure>
+<p>第二条命令执行时可能会出错，很正常：</p>
+<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><h4 id="初次使用树莓派系统时，默认用户是pi-，密码为raspberry。"><a href="#初次使用树莓派系统时，默认用户是pi-，密码为raspberry。" class="headerlink" title="初次使用树莓派系统时，默认用户是pi ，密码为raspberry。"></a>初次使用树莓派系统时，默认用户是pi ，密码为raspberry。</h4><h4 id="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"><a href="#要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）" class="headerlink" title="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"></a>要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+<h4 id="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"><a href="#说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等" class="headerlink" title="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"></a>说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等</h4><h4 id="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"><a href="#执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。" class="headerlink" title="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"></a>执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。</h4><h4 id="接着输入下面命令，用来解锁root账户"><a href="#接着输入下面命令，用来解锁root账户" class="headerlink" title="接着输入下面命令，用来解锁root账户"></a>接着输入下面命令，用来解锁root账户</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd --unlock root</span><br></pre></td></tr></table></figure>
+<h4 id="用下面命令切换到root管理员"><a href="#用下面命令切换到root管理员" class="headerlink" title="用下面命令切换到root管理员"></a>用下面命令切换到root管理员</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+<h4 id="会提示输入密码"><a href="#会提示输入密码" class="headerlink" title="会提示输入密码"></a>会提示输入密码</h4><p>2.安装完成后执行命令sudo /etc/init.d/xrdp restart 重启xrdp服务，输入命令netstat  -tnl ，检查3350 3389 5910 这三个端口处于LISTEN，一般就没问题了。<br>3.打开windows远程桌面连接（开始-&gt;附件-&gt;桌面连接）,输入树莓派开发的IP地址，点击连接。</p>
+<p>图片: <img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=918019f1b2014a90813e47b599763971/8b13632762d0f7031e18339f03fa513d2797c5cf.jpg" alt="Alt"><br>4.如下登录界面输入登陆名和密码（默认pi 和raspberry）<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=35aff47ac23d70cf4cfaab05c8ddd1ba/9f510fb30f2442a793a25be6da43ad4bd01302c0.jpg" alt="Alt"><br>5.成功登录树莓派系统的图形桌面<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=9681218848166d223877149c76220945/e850352ac65c103890396881b9119313b07e892a.jpg" alt="Alt"><br>本文章转自：<br>百度文库<br><a href="https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">树莓派</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/26/windows 远程连接登录树莓派桌面/">展开全文 >></a>
         </p>
       
 
@@ -1000,15 +1087,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">建站</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
               </li>
              
               <li class="article-tag-list-item">
