@@ -166,6 +166,94 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-PID算法简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/22/PID算法简介/">pid算法简介</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/22/PID算法简介/" class="archive-article-date">
+  	<time datetime="2019-05-22T03:01:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文以通俗的理解，以小车纵向控制举例说明PID的一些理解。<br>（一）首先，为什么要做PID？<br>由于外界原因，小车的实际速度有时不稳定，这是其一，<br>要让小车以最快的时间达达到既定的目标速度，这是其二。<br>速度控制系统是闭环，才能满足整个系统的稳定要求，必竟速度是系统参数之一，这是其三.<br>    小车调速肯定不是线性的，外界因素那么多，没人能证明是线性的。如果是线性的，直接用P就可以了。<br>比如在PWM=60%时，速度是2M/S，那么你要它3M/S，就把PWM提高到90%。因为90/60=3/2，这样一来太完美了。<br>完美是不可能的。<br>    那么不是线性的，要怎么怎么控制PWM使速度达到即定的速度呢？即要快，又要准，又要狠。（即快准狠<br>）系统这个速度的调整过程就必须通过某个算法调整，一般PID就是这个所用的算法。<br>    可能你会想到，如果通过编码器测得现在的速度是2.0m/s,要达到2.3m/s的速度，那么我把pwm增大一点不<br>就行了吗？是的，增大pwm多少呢？必须要通过算法，因为PWM和速度是个什么关系，对于整个系统来说，谁也<br>不知道。要一点一点的试，加个1%,不够，再加1%还是不够，那么第三次你还会加1%吗？很有可能就加2%了。<br>通过PID三个参数得到一个表达式：△PWM=a <em>△V1+b </em>△V2+c *△V3,a b c是通过PID的那个长长的公式展开<br>，然后约简后的数字，△V1 ，△V2 ，△V3 此前第一次调整后的速度差 ,第二次调整后的速度差,第三次。。<br>。。。一句话，PID要使当前速度达到目标速度最快，需要建立如何调整pwm和速度之间的关系。</p>
+<p>输入输出是什么：<br>输入就是前次速度，前前次速度，前前前次速度。<br>输出就是你的PWM应该增加或减小多少。</p>
+<p>（二）为了避免教科书公式化的说明，本文用口语化和通俗的语言描述。虽然不一定恰当，但意思差不多，就是那个事。如果要彻头彻尾地弄PID，建议多调试，写几个仿真程序。<br>     PID一般有两种：位置式PID和增量式PID。在小车里一般用增量式，为什么呢？位置式PID的输出与过去的所有状态有关，计算时要对e（每一次的控制误差）进行累加，这个计算量非常大，而明没有必要。而且小车的PID控制器的输出并不是绝对数值，而是一个△，代表增多少，减多少。换句话说，通过增量PID算法，每次输出是PWM要增加多少或者减小多少，而不是PWM的实际值。<br>下面均以增量式PID说明。<br>  这里再说一下P、I、D三个参数的作用。P=Proportion，比例的意思，I是Integral，积分，D是Differential微分。<br>打个比方，如果现在的输出是1，目标输出是100，那么P的作用是以最快的速度达到100，把P理解为一个系数即可；而I呢？大家学过高数的，0的积分才能是一个常数，I就是使误差为0而起调和作用；D呢？大家都知道微分是求导数，导数代表切线是吧，切线的方向就是最快到至高点的方向。这样理解，最快获得最优解，那么微分就是加快调节过程的作用了。<br>公式本来需要推导的，我就不来这一套了。直接贴出来：file:///C:/DOCUME~1/ADMINI~1/LOCALS~1/Temp/ksohtml/wps_clip_image-24040.png</p>
+<p>看看最后的结果：<br>△Uk=A<em>e(k)+B</em>e(k-1)+C<em>e(k-2)<br>这里KP是P的值，TD是D的值，1/Ti是I的值，都是常数，哦，还有一个T，T是采样周期，也是已知。而A B C是由P I D换算来的，按这个公式，就可以简化计算量了，因为P I D是常数，那么A B C可以用一个宏表示。这样看来，只需要求e(k) e(k-1) e(k-2)就可以知道△Uk的值了，按照△Uk来调节PWM的大小就OK了。PID三个参数的确定有很多方法，不在本文讨论范围内。采样周期也是有据可依的，不能太大，也不能太小。<br>   …………………………………………<br>   写着写着成了老太婆的裹脚了，本来说拿个程序来说明一下，看来只能在下一文中了。<br>一、转自网友的解释，呵呵：<br>制模型：你控制一个人让他以PID控制的方式走110步后停下。<br>（1）P比例控制，就是让他走110步，他按照一定的步伐走到一百零几步（如108步）或100多步（如112步）就停了。<br>说明：<br>P比例控制是一种最简单的控制方式。其控制器的输出与输入误差信号成比例关系。当仅有比例控制时系统输出存在稳态误差（Steady-state error）。<br>（2）PI积分控制，就是他按照一定的步伐走到112步然后回头接着走，走到108步位置时，然后又回头向110步位置走。在110步位置处来回晃几次，最后停在110步的位置。<br>说明：<br>在积分I控制中，控制器的输出与输入误差信号的积分成正比关系。对一个自动控制系统，如果在进入稳态后存在稳态误差，则称这个控制系统是有稳态误差的或简称有差系统（System with Steady-state Error）。为了消除稳态误差，在控制器中必须引入“积分项”。积分项对误差取决于时间的积分，随着时间的增加，积分项会增大。这样，即便误差很小，积分项也会随着时间的增加而加大，它推动控制器的输出增大使稳态误差进一步减小，直到等于零。因此，比例+积分（PI）控制器，可以使系统在进入稳态后无稳态误差。<br>（3）PD微分控制，就是他按照一定的步伐走到一百零几步后，再慢慢地向110步的位置靠近，如果最后能精确停在110步的位置，就是无静差控制；如果停在110步附近（如109步或111步位置），就是有静差控制。<br>说明：<br>在微分控制D中，控制器的输出与输入误差信号的微分（即误差的变化率）成正比关系。<br>自动控制系统在克服误差的调节过程中可能会出现振荡甚至失稳，其原因是由于存在有较大惯性组件（环节）或有滞后（delay）组件，具有抑制误差的作用，其变化总是落后于误差的变化。解决的办法是使抑制误差作用的变化“超前”，即在误差接近零时，抑制误差的作用就应该是零。这就是说，在控制器中仅引入“比例P”项往往是不够的，比例项的作用仅是放大误差的幅值，而目前需要增加的是“微分项”，它能预测误差变化的趋势。这样，具有比例+微分的控制器，就能够提前使抑制误差的控制作用等于零，甚至为负值，从而避免了被控量的严重超调。所以对有较大惯性或滞后的被控对象，比例P+微分D（PD）控制器能改善系统在调节过程中的动态特性。<br>解释二：<br>　　小明接到这样一个任务：有一个水缸有点漏水(而且漏水的速度还不一定固定不变)，要求水面高度维持在某个位置，一旦发现水面高度低于要求位置，就要往水缸里加水。 小明接到任务后就一直守在水缸旁边，时间长就觉得无聊，就跑到房里看小说了，每30分钟来检查一次水面高度。水漏得太快，每次小明来检查时，水都快漏完了，离要求的高度相差很远，小明改为每3分钟来检查一次，结果每次来水都没怎么漏，不需要加水，来得太频繁做的是无用功。几次试验后，确定每10分钟来检查一次。这个检查时间就称为采样周期。<br>　　开始小明用瓢加水，水龙头离水缸有十几米的距离，经常要跑好几趟才加够水，于是小明又改为用桶加，一加就是一桶，跑的次数少了，加水的速度也快了，但好几次将缸给加溢出了，不小心弄湿了几次鞋，小明又动脑筋，我不用瓢也不用桶，老子用盆，几次下来，发现刚刚好，不用跑太多次，也不会让水溢出。这个加水工具的大小就称为比例系数。<br>　　小明又发现水虽然不会加过量溢出了，有时会高过要求位置比较多，还是有打湿鞋的危险。他又想了个办法，在水缸上装一个漏斗，每次加水不直接倒进水缸，而是倒进漏斗让它慢慢加。这样溢出的问题解决了，但加水的速度又慢了，有时还赶不上漏水的速度。于是他试着变换不同大小口径的漏斗来控制加水的速度，最后终于找到了满意的漏斗。漏斗的时间就称为积分时间。<br>　　小明终于喘了一口，但任务的要求突然严了，水位控制的及时性要求大大提高，一旦水位过低，必须立即将水加到要求位置，而且不能高出太多，否则不给工钱。小明又为难了！于是他又开努脑筋，终于让它想到一个办法，常放一盆备用水在旁边，一发现水位低了，不经过漏斗就是一盆水下去，这样及时性是保证了，但水位有时会高多了。他又在要求水面位置上面一点将水缸要求的水平面处凿一孔，再接一根管子到下面的备用桶里这样多出的水会从上面的孔里漏出来。这个水漏出的快慢就称为微分时间。 看到几个问采样周期的帖子，临时想了这么个故事。微分的比喻一点牵强，不过能帮助理解就行了，呵呵，入门级的，如能帮助新手理解下PID，于愿足矣。故事中小明的试验是一步步独立做，但实际加水工具、漏斗口径、溢水孔的大小同时都会影响加水的速度，水位超调量的大小，做了后面的实验后，往往还要修改改前面<br>（三）PID实际编程的过程的，要注意的东西还是有几点的。PID这东西可以做得很深。<br>1 PID的诊定。凑试法，临界比例法，经验法。<br>2 T的确定，采样周期应远小于过程的扰动信号的周期，在小车程序中一般是ms级别。<br>3 目标速度何时赋值问题，如何更新新的目标速度?这个问题一般的人都乎略了。目标速度肯定不是个恒定的，那么何时改变目标速度呢？<br>4 改变了目标速度，那么e(k) e(k-1) e(k-2)怎么改变呢？是赋0还是要怎么变？<br>5 是不是PID要一直开着？<br>6 error为多少时就可以当速度已达到目标？<br>7 PID的优先级怎么处理，如果和图像采集有冲突怎么办？<br>8 PID的输入是速度，输出是PWM，按理说PWM产生速度，但二者不是同一个东西，有没有问题？<br>9 PID计算如何优化其速度？指针，汇编，移位？都可以试！<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></em><br>//定义PID结构体<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>typedef struct PID<br>{<br>    int SetPoint; //设定目标Desired Value<br>    double Proportion; //比例常数Proportional Const<br>    double Integral; //积分常数Integral Const<br>    double Derivative; //微分常数Derivative Const<br>    int LastError; //Error[-1]<br>    int PrevError; //Error[-2]<br>} PID;<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>//定义相关宏<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p>
+<p>#define P_DATA 100</p>
+<p>#define I_DATA 0.6</p>
+<p>#define D_DATA 1</p>
+<p>#define HAVE_NEW_VELOCITY 0X01<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>//声明PID实体<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>static PID sPID;<br>static PID <em>sptr = &sPID;<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></em><br>//PID参数初始化<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>void IncPIDInit(void)<br>{<br>sptr-&gt;LastError = 0; //Error[-1]<br>sptr-&gt;PrevError = 0; //Error[-2]<br>sptr-&gt;Proportion =P_DATA; //比例常数Proportional Const<br>sptr-&gt;Integral =I_DATA; //积分常数Integral Const<br>sptr-&gt;Derivative =D_DATA; //微分常数Derivative Const<br>sptr-&gt;SetPoint =100;  目标是100<br>}<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>//增量式PID控制设计<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>int IncPIDCalc(int NextPoint)<br>{<br>   int iError, iIncpid; //当前误差<br>   iError = sptr-&gt;SetPoint - NextPoint; //增量计算<br>   iIncpid = sptr-&gt;Proportion * iError //E[k]项</p>
+<pre><code>         - sptr-&gt;Integral * sptr-&gt;LastError //E[k－1]项
+         + sptr-&gt;Derivative * sptr-&gt;PrevError; //E[k－2]项
+sptr-&gt;PrevError = sptr-&gt;LastError;   //存储误差，用于下次计算
+sptr-&gt;LastError = iError;
+return(iIncpid);                         //返回增量值
+</code></pre><p>}<br>Int g_CurrentVelocity;<br>Int g_Flag;</p>
+<p>void main(void)<br>{<br>   DisableInterrupt<br>InitMCu();<br>   IncPIDInit();<br>g_CurrentVelocity=0;  //全局变量也初始化<br>g_Flag=0;               //全局变量也初始化<br>EnableInterrupt;<br>    While(1)<br>{<br>  if (g_Flag&amp; HAVE_NEW_VELOCITY)<br>     {<br>         PWMOUT+= IncPIDCalc(CurrentVelocity);<br>           g_Flag&amp;=~ HAVE_NEW_VELOCITY;<br>}<br>}<br>}<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>//采样周期T<br>//<strong><strong><strong><strong><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></strong></strong></strong></strong><br>Interrrupt TIME void<br>{<br>  CurrentVelocity =GetCurrentVelocity;<br>  g_Flag|= HAVE_NEW_VELOCITY;<br>}<br>转自<br><a href="https://blog.csdn.net/JH17369320302/article/details/79097819" target="_blank" rel="noopener">https://blog.csdn.net/JH17369320302/article/details/79097819</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/22/PID算法简介/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-陀螺仪和加速度传感器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -423,107 +511,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-pid控制入门笔记（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/26/pid控制入门笔记（1）/">pid控制算法入门笔记（一）</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/26/pid控制入门笔记（1）/" class="archive-article-date">
-  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="PID控制器"><a href="#PID控制器" class="headerlink" title="PID控制器"></a>PID控制器</h1><h4 id="最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念"><a href="#最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念" class="headerlink" title="最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念"></a>最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念</h4><p>PID控制器（比例-积分-微分控制器），由比例单元（P）、积分单元（I）和微分单元（D）组成[1]。可以透过调整这三个单元的增益Kp，Ki和Kd来调定其特性。PID控制器主要适用于基本上线性，且动态特性不随时间变化的系统。</p>
-<p>PID控制器的方块图<br>PID控制器是一个在工业控制应用中常见的反馈回路部件。这个控制器把收集到的数据和一个参考值进行比较，然后把这个差别用于计算新的输入值，这个新的输入值的目的是可以让系统的数据达到或者保持在参考值。PID控制器可以根据历史数据和差别的出现率来调整输入值，使系统更加准确而稳定。</p>
-<p>PID控制器的比例单元(P)、积分单元(I)和微分单元(D)分别对应目前误差、过去累计误差及未来误差。若是不知道受控系统的特性，一般认为PID控制器是最适用的控制器[2]。借由调整PID控制器的三个参数，可以调整控制系统，设法满足设计需求。控制器的响应可以用控制器对误差的反应快慢、控制器过冲的程度及系统震荡的程度来表示。不过使用PID控制器不一定保证可达到系统的最佳控制，也不保证系统稳定性。</p>
-<p>有些应用只需要PID控制器的部分单元，可以将不需要单元的参数设为零即可。因此PID控制器可以变成PI控制器、PD控制器、P控制器或I控制器。其中又以PI控制器比较常用，因为D控制器对回授噪声十分敏感，而若没有I控制器的话，系统不会回到参考值，会存在一个误差量。<br>图片: <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Pid-feedback-nct-int-correct.png/1280px-Pid-feedback-nct-int-correct.png" alt="Alt"></p>
-<h3 id="下面是从github上找的一个实例："><a href="#下面是从github上找的一个实例：" class="headerlink" title="下面是从github上找的一个实例："></a>下面是从github上找的一个实例：</h3><p>不过时stm32开发板，是用C语言写的：<br>作为一个入门参考吧<br>以STM32单片机为控制器，舵机为执行器，摄像头为检测仪表（测量元件）的并基于积分分离算法的板球控制系统，实现对小球在平板上精确定位的控制功能</p>
-<p>确定系统方案：<br>1.确定控制目标，选择被控变量<br>    实现滚球在平板上的定位。被控变量选择滚球在平板上的坐标<br>2.选择测量参数与测量仪表<br>    测量参数为滚球在平板上的坐标。<br>    测量仪表：选择摄像头<br>        原因：检测成本低，控制质量要求在可接受范围内，  对于平板的长宽，摄像头量程基本满足需要，可靠性较低<br>    检测工作原理：像素获取，（未进行滤波操作）直接二值化，小球轮廓检测，获取小球中心<br>    检测小球位置的算法：<br>        通过遍历，寻找小球的上下左右四个顶点位置，求小球质心位置<br>    检测参数的滤波处理操作：<br>        比赛中，无，直接进行图像二值化处理，图像在获取和传输时容易产生噪声，影响目标特征的准确性，阈值人为选择，容易受到光线的干扰，比赛时使用台灯进行补光操作。应该进行图像处理<br>    测量误差 60cm/320 = 1.8mm  60cm/240  = 2.5mm  题目给出小球圆边界与最大范围圆边界有15mm的允许误差，满足精度要求，对控制要求较高<br>3.操作变量的选择与主要扰动的分析<br>操作变量：平板的俯仰角和横滚角。<br>扰动变量：光源对于平板的漫反射<br>4.操作变量与被控变量的配对<br>   在本比赛中无需考虑，比较明显能够找到，其他变量对于被控变量的增益都过小<br>5.控制方案与控制算法的选择<br>    控制方案：最简单的单回路控制    or  串级控制  选择单回路控制<br>    控制算法：积分分离的PID算法<br>       测量值与设定值之间的偏差超出某一个阈值，使用PD算法，在阈值范围之内加入积分效果<br>       control value = last controled value + P <em> error + flag </em> I <em> error integral value + d </em> (now error - last error)<br>6.执行器的选型<br>    根据操作变量的工艺条件以及对执行器位移特性的要求的选择<br>    选择控制变量与操作变量线性度较好的舵机<br>   驱动舵机功率放大电路：</p>
-<p>7.控制系统的现场安装、调试<br>    检查和调整个控制仪表和设备的工作状况。<br>    执行器是舵机的时候工作在合理电压下才会满足线性特性<br>    控制器参数整定过程：临界振荡法</p>
-<p>控制算法：<br>摄像头检测：小球运动检测及处理<br>舵机驱动电路：<br>测试方法：<br>测试结果分析：</p>
-<p>遇到的情况及解决方法：</p>
-<p>1.常规PID 控制系统长时间震荡？<br>大幅度提降设定值，解决方法是积分分离算法，</p>
-<p>2.存在外部扰动，尤其是外部光源<br>使用可调节亮度的台灯进行补光，并且将平台通过<br>显示屏显示出来</p>
-<p>3.摄像头无法完整覆盖整个平板<br>通过适当的太高摄像头，牺牲一部分小球位置精确度。</p>
-<p>4.舵机无法准确驱动，控制变量与操作变量不成线性关系<br>测量电池电压，发现电压过低，更换电池</p>
-<p>5.摄像头采样率（帧数） 测量滞后现象<br>实际效果还可以，30帧的采样率<br>滞后会影响系统稳定性，系统相位裕度会减小</p>
-<p>6.物理元件的死区和饱和的现象怎么解决，运动范围<br>通过限幅</p>
-<p>7.被控对象是一个非线性系统，你是如何控制的<br>    通过反馈，可以将被控对象视作黑箱，非线性系统可以使用PID去控制被控对象</p>
-<p>8.调试PID 参数问题，系统一直得不到临界震荡的效果或者震荡不明显？<br>使用的临界比例度法，他适用于系统时间常数较小的情况。  时间常数较大下，纯比例作用下会很稳定<br>改进：增长执行器舵机的舵臂，提升广义对象系统的响应性能，<br>临界比例度法：先去掉积分和微分部分，将P值逐渐增大到系统临界震荡，然后加入积分，对P适当缩小<br>转自：<br><a href="https://github.com/xiaohongxiao/ball_rolling_control_system" target="_blank" rel="noopener">https://github.com/xiaohongxiao/ball_rolling_control_system</a><br>1Z实验室<br>：<br><img src="https://avatars1.githubusercontent.com/u/41182635?s=200&amp;v=4" alt="Alt"><br>这个网址上由一些关于pid和图形识别的教程：<br>今天就到这了，未完待续…..</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/26/pid控制入门笔记（1）/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-建立个人网站之后，怎末添加标签的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -597,6 +584,107 @@ categories: 技术</code><ul>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/05/26/建立个人网站之后，怎末添加标签的问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-pid控制入门笔记（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/26/pid控制入门笔记（1）/">pid控制算法入门笔记（一）</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/26/pid控制入门笔记（1）/" class="archive-article-date">
+  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="PID控制器"><a href="#PID控制器" class="headerlink" title="PID控制器"></a>PID控制器</h1><h4 id="最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念"><a href="#最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念" class="headerlink" title="最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念"></a>最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念</h4><p>PID控制器（比例-积分-微分控制器），由比例单元（P）、积分单元（I）和微分单元（D）组成[1]。可以透过调整这三个单元的增益Kp，Ki和Kd来调定其特性。PID控制器主要适用于基本上线性，且动态特性不随时间变化的系统。</p>
+<p>PID控制器的方块图<br>PID控制器是一个在工业控制应用中常见的反馈回路部件。这个控制器把收集到的数据和一个参考值进行比较，然后把这个差别用于计算新的输入值，这个新的输入值的目的是可以让系统的数据达到或者保持在参考值。PID控制器可以根据历史数据和差别的出现率来调整输入值，使系统更加准确而稳定。</p>
+<p>PID控制器的比例单元(P)、积分单元(I)和微分单元(D)分别对应目前误差、过去累计误差及未来误差。若是不知道受控系统的特性，一般认为PID控制器是最适用的控制器[2]。借由调整PID控制器的三个参数，可以调整控制系统，设法满足设计需求。控制器的响应可以用控制器对误差的反应快慢、控制器过冲的程度及系统震荡的程度来表示。不过使用PID控制器不一定保证可达到系统的最佳控制，也不保证系统稳定性。</p>
+<p>有些应用只需要PID控制器的部分单元，可以将不需要单元的参数设为零即可。因此PID控制器可以变成PI控制器、PD控制器、P控制器或I控制器。其中又以PI控制器比较常用，因为D控制器对回授噪声十分敏感，而若没有I控制器的话，系统不会回到参考值，会存在一个误差量。<br>图片: <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Pid-feedback-nct-int-correct.png/1280px-Pid-feedback-nct-int-correct.png" alt="Alt"></p>
+<h3 id="下面是从github上找的一个实例："><a href="#下面是从github上找的一个实例：" class="headerlink" title="下面是从github上找的一个实例："></a>下面是从github上找的一个实例：</h3><p>不过时stm32开发板，是用C语言写的：<br>作为一个入门参考吧<br>以STM32单片机为控制器，舵机为执行器，摄像头为检测仪表（测量元件）的并基于积分分离算法的板球控制系统，实现对小球在平板上精确定位的控制功能</p>
+<p>确定系统方案：<br>1.确定控制目标，选择被控变量<br>    实现滚球在平板上的定位。被控变量选择滚球在平板上的坐标<br>2.选择测量参数与测量仪表<br>    测量参数为滚球在平板上的坐标。<br>    测量仪表：选择摄像头<br>        原因：检测成本低，控制质量要求在可接受范围内，  对于平板的长宽，摄像头量程基本满足需要，可靠性较低<br>    检测工作原理：像素获取，（未进行滤波操作）直接二值化，小球轮廓检测，获取小球中心<br>    检测小球位置的算法：<br>        通过遍历，寻找小球的上下左右四个顶点位置，求小球质心位置<br>    检测参数的滤波处理操作：<br>        比赛中，无，直接进行图像二值化处理，图像在获取和传输时容易产生噪声，影响目标特征的准确性，阈值人为选择，容易受到光线的干扰，比赛时使用台灯进行补光操作。应该进行图像处理<br>    测量误差 60cm/320 = 1.8mm  60cm/240  = 2.5mm  题目给出小球圆边界与最大范围圆边界有15mm的允许误差，满足精度要求，对控制要求较高<br>3.操作变量的选择与主要扰动的分析<br>操作变量：平板的俯仰角和横滚角。<br>扰动变量：光源对于平板的漫反射<br>4.操作变量与被控变量的配对<br>   在本比赛中无需考虑，比较明显能够找到，其他变量对于被控变量的增益都过小<br>5.控制方案与控制算法的选择<br>    控制方案：最简单的单回路控制    or  串级控制  选择单回路控制<br>    控制算法：积分分离的PID算法<br>       测量值与设定值之间的偏差超出某一个阈值，使用PD算法，在阈值范围之内加入积分效果<br>       control value = last controled value + P <em> error + flag </em> I <em> error integral value + d </em> (now error - last error)<br>6.执行器的选型<br>    根据操作变量的工艺条件以及对执行器位移特性的要求的选择<br>    选择控制变量与操作变量线性度较好的舵机<br>   驱动舵机功率放大电路：</p>
+<p>7.控制系统的现场安装、调试<br>    检查和调整个控制仪表和设备的工作状况。<br>    执行器是舵机的时候工作在合理电压下才会满足线性特性<br>    控制器参数整定过程：临界振荡法</p>
+<p>控制算法：<br>摄像头检测：小球运动检测及处理<br>舵机驱动电路：<br>测试方法：<br>测试结果分析：</p>
+<p>遇到的情况及解决方法：</p>
+<p>1.常规PID 控制系统长时间震荡？<br>大幅度提降设定值，解决方法是积分分离算法，</p>
+<p>2.存在外部扰动，尤其是外部光源<br>使用可调节亮度的台灯进行补光，并且将平台通过<br>显示屏显示出来</p>
+<p>3.摄像头无法完整覆盖整个平板<br>通过适当的太高摄像头，牺牲一部分小球位置精确度。</p>
+<p>4.舵机无法准确驱动，控制变量与操作变量不成线性关系<br>测量电池电压，发现电压过低，更换电池</p>
+<p>5.摄像头采样率（帧数） 测量滞后现象<br>实际效果还可以，30帧的采样率<br>滞后会影响系统稳定性，系统相位裕度会减小</p>
+<p>6.物理元件的死区和饱和的现象怎么解决，运动范围<br>通过限幅</p>
+<p>7.被控对象是一个非线性系统，你是如何控制的<br>    通过反馈，可以将被控对象视作黑箱，非线性系统可以使用PID去控制被控对象</p>
+<p>8.调试PID 参数问题，系统一直得不到临界震荡的效果或者震荡不明显？<br>使用的临界比例度法，他适用于系统时间常数较小的情况。  时间常数较大下，纯比例作用下会很稳定<br>改进：增长执行器舵机的舵臂，提升广义对象系统的响应性能，<br>临界比例度法：先去掉积分和微分部分，将P值逐渐增大到系统临界震荡，然后加入积分，对P适当缩小<br>转自：<br><a href="https://github.com/xiaohongxiao/ball_rolling_control_system" target="_blank" rel="noopener">https://github.com/xiaohongxiao/ball_rolling_control_system</a><br>1Z实验室<br>：<br><img src="https://avatars1.githubusercontent.com/u/41182635?s=200&amp;v=4" alt="Alt"><br>这个网址上由一些关于pid和图形识别的教程：<br>今天就到这了，未完待续…..</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/26/pid控制入门笔记（1）/">展开全文 >></a>
         </p>
       
 
@@ -839,19 +927,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">建站</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
+                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
+                <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
               </li>
             
             <div class="clearfix"></div>
