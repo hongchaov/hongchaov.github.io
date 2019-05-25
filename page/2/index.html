@@ -166,19 +166,19 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-建立个人网站之后，怎末添加标签的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-windows 远程连接登录树莓派桌面" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/26/建立个人网站之后，怎末添加标签的问题/">建立网站之后标签怎么分类显示</a>
+      <a class="article-title" href="/2017/05/26/windows 远程连接登录树莓派桌面/">树莓派远程登录</a>
     </h1>
   
 
         
-        <a href="/2017/05/26/建立个人网站之后，怎末添加标签的问题/" class="archive-article-date">
+        <a href="/2017/05/26/windows 远程连接登录树莓派桌面/" class="archive-article-date">
   	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
 </a>
         
@@ -186,24 +186,130 @@ var _hmt = _hmt || [];
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="标题Hexo-next-主题配置右侧栏的分类和标签打开的是空白"><a href="#标题Hexo-next-主题配置右侧栏的分类和标签打开的是空白" class="headerlink" title="标题Hexo next 主题配置右侧栏的分类和标签打开的是空白"></a>标题Hexo next 主题配置右侧栏的分类和标签打开的是空白</h2><p>新增一些Hexo中遇见的坑。</p>
-<ol>
-<li>新建 标签 和分类 页面</li>
-</ol>
-<ul>
-<li>只要在 source 文件夹下新建.md文件，并且文章前面按如下格式表明所属分类和标签就行：（我的是E:\Hexo\Hexo\source_posts）文件夹下</li>
-<li><code>title: 自学编程成功概率有多少可能
-date: 2017-05-26 19:57:47
-tags: [编程,感悟]
-categories: 技术</code><ul>
-<li>先根目录输入命令 <code>hexo new page categories</code> 会自动新建 categorier 文件夹并生成一个index.md文件，里面的代码为：</li>
+        <h5 id="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"><a href="#刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短" class="headerlink" title="刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短"></a>刚接触树莓派的时候因为远程连接浪费了许多时间，后来发现windows自带的远程连接最简单，需要配置时间最短</h5><p>1.树莓派官方的操作系统默认是不支持windows远程登录功能的，需要安装xrdp,具体操作是树莓派开发板上电连接好网络后，ssh登录到树莓派，执行命令</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> purge tightvnc xrdp</span><br><span class="line"></span><br><span class="line">apt-<span class="keyword">get</span> install tightvncserver xrdp</span><br></pre></td></tr></table></figure>
+<p>第二条命令执行时可能会出错，很正常：</p>
+<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><h4 id="初次使用树莓派系统时，默认用户是pi-，密码为raspberry。"><a href="#初次使用树莓派系统时，默认用户是pi-，密码为raspberry。" class="headerlink" title="初次使用树莓派系统时，默认用户是pi ，密码为raspberry。"></a>初次使用树莓派系统时，默认用户是pi ，密码为raspberry。</h4><h4 id="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"><a href="#要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）" class="headerlink" title="要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）"></a>要想使用root帐号，或者说开启root用户，可使用pi用户登录，执行下面命令（此命令是给root账户设置密码的，当切换到root管理员后，此命令无效）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+<h4 id="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"><a href="#说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等" class="headerlink" title="说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等"></a>说明：sudo是linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具，如halt，reboot，su等等</h4><h4 id="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"><a href="#执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。" class="headerlink" title="执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。"></a>执行此命令后系统会提示输入两遍的root密码（用来确保你记住了密码）。</h4><h4 id="接着输入下面命令，用来解锁root账户"><a href="#接着输入下面命令，用来解锁root账户" class="headerlink" title="接着输入下面命令，用来解锁root账户"></a>接着输入下面命令，用来解锁root账户</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd --unlock root</span><br></pre></td></tr></table></figure>
+<h4 id="用下面命令切换到root管理员"><a href="#用下面命令切换到root管理员" class="headerlink" title="用下面命令切换到root管理员"></a>用下面命令切换到root管理员</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+<h4 id="会提示输入密码"><a href="#会提示输入密码" class="headerlink" title="会提示输入密码"></a>会提示输入密码</h4><p>2.安装完成后执行命令sudo /etc/init.d/xrdp restart 重启xrdp服务，输入命令netstat  -tnl ，检查3350 3389 5910 这三个端口处于LISTEN，一般就没问题了。<br>3.打开windows远程桌面连接（开始-&gt;附件-&gt;桌面连接）,输入树莓派开发的IP地址，点击连接。</p>
+<p>图片: <img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=918019f1b2014a90813e47b599763971/8b13632762d0f7031e18339f03fa513d2797c5cf.jpg" alt="Alt"><br>4.如下登录界面输入登陆名和密码（默认pi 和raspberry）<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=35aff47ac23d70cf4cfaab05c8ddd1ba/9f510fb30f2442a793a25be6da43ad4bd01302c0.jpg" alt="Alt"><br>5.成功登录树莓派系统的图形桌面<br><img src="图片: ![Alt](https://imgsa.baidu.com/exp/w=480/sign=9681218848166d223877149c76220945/e850352ac65c103890396881b9119313b07e892a.jpg" alt="Alt"><br>本文章转自：<br>百度文库<br><a href="https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html" target="_blank" rel="noopener">https://jingyan.baidu.com/article/ac6a9a5e3406732b653eac23.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">树莓派</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/26/windows 远程连接登录树莓派桌面/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-欢迎使用CSDN-markdown编辑器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/26/欢迎使用CSDN-markdown编辑器/">这是我的第一篇博客</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/26/欢迎使用CSDN-markdown编辑器/" class="archive-article-date">
+  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>@<a href="今天天气不错，建成网站后第一天写博客">TOC</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前一直羡慕那些拥有自己个人网站的人，一直想搭建属于自己的个人网站，也是想为自己的成长做个记录。</p>
+<h2 id="什么是Hexo-？"><a href="#什么是Hexo-？" class="headerlink" title="什么是Hexo ？"></a>什么是Hexo ？</h2><p>Hexo是一款基于Node.js的静态博客框架，依赖少、易于安装使用，可以方便的生成静态网页托管在GitHub上。Hexo是GitHub上的开源项目，参见：Hexo的Git。如果想了解更加全面的Hexo，可以到其官网Hexo了解。因为Hexo的创建者是台湾人，对中文的支持很友好，可以选择中文进行查看。</p>
+<h2 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h2><ul>
+<li>GitHub创建个人仓库</li>
+<li>安装Git</li>
+<li>安装Node.js</li>
+<li>安装Hexo</li>
+<li>将 GitHub 和 Hexo 关联起来<h2 id="GitHub创建个人仓库"><a href="#GitHub创建个人仓库" class="headerlink" title="GitHub创建个人仓库"></a>GitHub创建个人仓库</h2>登录到GitHub，如果没有GitHub账号，注册一个GitHub账号：GitHub,如下图所示创建个人仓库，仓库名应该为：用户名.github.io，[注：这是固定写法]，比如我的仓库名为：celesteting.github.io<h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2>什么是Git？简单来说Git是开源的分布式版本控制系统，我们网站在本地搭建好了，需要使用Git同步到GitHub上。如果想了解Git的细节，参考廖雪峰老师的Git教程：Git教程。从Git官网下载Git-安装包 ，下载后安装，在命令行输入git测试是否安装成功，安装成功后，将Git与GitHub账号绑定，鼠标右键打开Git Bash Here。</li>
 </ul>
+<p>设置user.name和user.email配置信息<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"你的GitHub用户名"</span></span><br><span class="line">$ git config --global user.email <span class="string">"你的GitHub注册邮箱"</span></span><br></pre></td></tr></table></figure></p>
+<p>然后直接三个回车即可，默认不需要设置密码 然后找到生成的.ssh文件夹中的id_rsa.pub密钥，将内容全部复制，<br>打开GitHub_Settings_keys页面，新建new SSH Key，Title为标题，随意填即可，将刚刚复制的id_rsa.pub内容复制进去，最后点击Add SSH key。<br>在Git Bash检测GitHub公钥设置是否成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"你的GitHub用户名"</span></span><br><span class="line">$ git config --global user.email <span class="string">"你的GitHub注册邮箱"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>Hexo基于Node.js，Node.js下载地址：Node.js下载地址,安装后，<br>检测Node.js是否安装成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br></pre></td></tr></table></figure></p>
+<p>检测npm是否安装成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm -v</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>Hexo就是我们个人博客的框架，这里需要在自己的电脑里创建一个文件夹，这里我命名为wangzhan，Hexo框架与以后你自己发布的网站都在这个文件夹中，创建好后，进入文件夹中 -&gt; Git Bash Here -&gt; 使用npm命令安装Hexo</p>
+<p>这个安装时间较长（耐心等待中），安装完成后，初始化我们的博客，输入：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init Hexo</span><br></pre></td></tr></table></figure></p>
+<p>上面的指令会生成一个名为Hexo的文件夹 </p>
+<p>为了检测网站的雏形，在Hexo中分别按顺序输入一下三条命令：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init Hexo</span><br></pre></td></tr></table></figure></p>
+<p>完成后在浏览器输入: <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a> 可以看到我们写出的第一篇博文test。</p>
+<p>常用 Hexo 命令</p>
+<ul>
+<li>hexo n “我的博文” #新建文章</li>
+<li>hexo generate 也可简写成 hexo g #生成</li>
+<li>hexo server 也可简写成 hexo s #启动服务预览（监视文件变动并自动更新，无需重启-服务器）</li>
+<li>hexo deploy 也可简写成 hexo d #部署</li>
+<li>hexo server -s #静态模式</li>
+<li>hexo server -p 5000 #修改端口</li>
+<li>hexo server -i 192.168.1.1 #自定义IP</li>
+<li>hexo clean #清楚缓存<h2 id="将-GitHub-和-Hexo-关联起来"><a href="#将-GitHub-和-Hexo-关联起来" class="headerlink" title="将 GitHub 和 Hexo 关联起来"></a>将 GitHub 和 Hexo 关联起来</h2>在Hexo根目录里_config.yml文件成为站点配置文件，打开_config.yml修改deploy:<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repository: https:<span class="comment">//github.com/celesteting/celesteting.github.io.git</span></span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">title: categories</span><br><span class="line">date: 2019-01-30 23:10:51</span><br></pre></td></tr></table></figure>
-<p>同理，「标签」也一样 hexo new page tags 生成 tags 文件夹，其中会自动生成一个index.md文件,代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">title: tags</span><br><span class="line">date: 2019-01-30 23:14:51</span><br></pre></td></tr></table></figure>
-<p>转自：简书<br><a href="https://www.jianshu.com/p/f138032e7539" target="_blank" rel="noopener">https://www.jianshu.com/p/f138032e7539</a></p>
+<p>保存站点配置，其实就是然hexo知道你要把Hexo部署在哪个位置，很明显，我们部署在我们GitHub仓库里，最后安装Git部署插件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure></p>
 
       
 
@@ -229,7 +335,7 @@ categories: 技术</code><ul>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        			<a href="/categories/html//" class="article-tag-list-link color5">html</a>
         		</li>
       		
 		</ul>
@@ -238,7 +344,7 @@ categories: 技术</code><ul>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/26/建立个人网站之后，怎末添加标签的问题/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/05/26/欢迎使用CSDN-markdown编辑器/">展开全文 >></a>
         </p>
       
 
@@ -466,7 +572,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
+                <a href="javascript:void(0)" class="js-tag color4">python基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -474,7 +580,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+                <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -491,6 +597,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">软件安装</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
               </li>
             
             <div class="clearfix"></div>
