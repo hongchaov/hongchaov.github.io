@@ -166,6 +166,111 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python从入门到实践（错误笔记）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/27/python从入门到实践（错误笔记）/">python从入门到实践（错误笔记）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/27/python从入门到实践（错误笔记）/" class="archive-article-date">
+  	<time datetime="2019-05-27T09:26:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>今天学习python列表的时候，合起书自己写的列表程序，发现竟然和我想的结果不一样，后来一看书，原来是没打引号，下面是我想修改，列表中的元素<br>出错程序：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">anf = [<span class="string">'xiaoming,xiaoli,qangwu'</span>]</span><br><span class="line">anf[<span class="number">0</span>] = <span class="string">'xiao'</span></span><br><span class="line">print(anf)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>错误结果：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'xiaoming,xiaoli,qangwu'</span>]</span><br><span class="line"></span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>原来是我用一个引号把所有的元素全部包含在其中了<br>下面是改正过的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">anf = [<span class="string">'xiaoming'</span>,<span class="string">'xiaoli'</span>,<span class="string">'qangwu'</span>]</span><br><span class="line">anf[0] = 'xiao'#将这个元素替换列表中的元素</span><br><span class="line">print(anf)</span><br></pre></td></tr></table></figure></p>
+<p>结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[&apos;xiao&apos;, &apos;xiaoli&apos;, &apos;qangwu&apos;]</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>确定列表不是空的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yuansu = []</span><br><span class="line">if yuansu:   #如果列表中有元素</span><br><span class="line">    print(yuansu)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"kong"</span>)</span><br></pre></td></tr></table></figure>
+<p>结果：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kong</span><br><span class="line"></span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>循环遍历每个字典：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">luyou = &#123;</span><br><span class="line">            <span class="string">'city'</span>:<span class="string">'beijing'</span>,</span><br><span class="line">             <span class="string">'city1'</span>:<span class="string">'chengde'</span>,</span><br><span class="line">             <span class="string">'city2'</span>:<span class="string">'qingdao'</span>,</span><br><span class="line">             <span class="string">'city3'</span>:<span class="string">'shanghai'</span></span><br><span class="line">         &#125;</span><br><span class="line">for k,v in luyou.items():#必须加上item（）这个方法</span><br><span class="line">    print(<span class="string">"jian:"</span>,k)</span><br><span class="line">    print(<span class="string">"zhi"</span>,v)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>结果：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jian: city</span><br><span class="line">zhi beijing</span><br><span class="line">jian: city1</span><br><span class="line">zhi chengde</span><br><span class="line">jian: city2</span><br><span class="line">zhi qingdao</span><br><span class="line">jian: city3</span><br><span class="line">zhi shanghai</span><br><span class="line"></span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>只提取字典中所有的键的值<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">luyou = &#123;</span><br><span class="line">            <span class="string">'city'</span>:<span class="string">'beijing'</span>,</span><br><span class="line">             <span class="string">'city1'</span>:<span class="string">'chengde'</span>,</span><br><span class="line">             <span class="string">'city2'</span>:<span class="string">'qingdao'</span>,</span><br><span class="line">             <span class="string">'city3'</span>:<span class="string">'shanghai'</span></span><br><span class="line">         &#125;</span><br><span class="line">for name in luyou.keys():#必须加上item（）这个方法</span><br><span class="line">    print(name.title())#title是第一个字母大写的意思</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>结果显示<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">City</span><br><span class="line">City1</span><br><span class="line">City2</span><br><span class="line">City3</span><br><span class="line"></span><br><span class="line">Process finished <span class="keyword">with</span> exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python基础</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/27/python从入门到实践（错误笔记）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-python基础回顾" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -963,86 +1068,6 @@ return(iIncpid);                         //返回增量值
 
 
   
-    <article id="post-机智云学习之旅" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/20/机智云学习之旅/">机智云学习之旅</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/20/机智云学习之旅/" class="archive-article-date">
-  	<time datetime="2019-05-20T08:32:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><h3 id="androidStudio工具的使用’’"><a href="#androidStudio工具的使用’’" class="headerlink" title="androidStudio工具的使用’’"></a>androidStudio工具的使用’’</h3></li>
-<li><h3 id="导入开源框架必须知道的知识点"><a href="#导入开源框架必须知道的知识点" class="headerlink" title="导入开源框架必须知道的知识点"></a>导入开源框架必须知道的知识点</h3></li>
-<li><h3 id="机智云简介："><a href="#机智云简介：" class="headerlink" title="机智云简介："></a>机智云简介：</h3>机智云开源框架（GizOpenSource_AppKit_Android_AS） 是开源的适用于物联网的软件框架，用于无缝的支持设备到设备的互联。</li>
-</ul>
-<p>能帮助开发者快速构建物联网生态系统，实现设备间互联，加速智能设备的应用开发。其包含Wi-Fi类智能硬件app通用功能的一套源码。</p>
-<p>只要是使用机智云协议的产品，开发者开发配套的app时都可以直接使用该框架的源码实现快速开发，从而缩短app的开发周期短、降低开发成本。<br>1.机智云物联网应用程序地址：<br><a href="https://github.com/gizwits/GOpenSource_AppKit_Android_AS" target="_blank" rel="noopener">https://github.com/gizwits/GOpenSource_AppKit_Android_AS</a><br>此为Android Studio版本.Eclipse版本下载地址：https：//github.com/gizwits/GizOpenSource_AppKit_Android</p>
-<h2 id="未完待续……学python-QT去了，抽空再学机智云"><a href="#未完待续……学python-QT去了，抽空再学机智云" class="headerlink" title="未完待续……学python QT去了，抽空再学机智云"></a>未完待续……学python QT去了，抽空再学机智云</h2>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">机智云</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/20/机智云学习之旅/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1148,11 +1173,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
+                <a href="javascript:void(0)" class="js-tag color3">建站</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">建站</a>
+                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1160,11 +1185,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
+                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
               </li>
              
               <li class="article-tag-list-item">
