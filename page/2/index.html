@@ -166,6 +166,91 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-陀螺仪和加速度传感器" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/22/陀螺仪和加速度传感器/">陀螺仪和加速剂</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/22/陀螺仪和加速度传感器/" class="archive-article-date">
+  	<time datetime="2019-05-21T19:41:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天找pid的资料突然找到了一个，然后发现了一个平衡车的教程，所以就记录了下来，方便以后看，下面有链接所以可以去看一下这个网站。</p>
+<h3 id="1-加速度传感器"><a href="#1-加速度传感器" class="headerlink" title="1. 加速度传感器"></a>1. 加速度传感器</h3><p>加速度传感器，有些人也叫它加速度计，你只要记住其实是一个东西两个名字而已。</p>
+<p>加速度传感器，顾名思义，用于测量由地球引力作用或者物体运动所产生的加速度。</p>
+<p>为了方便理解，我将加速度分为两种：由地球引力产生的重力加速度，只要地球还在，重力就不会消失；由物体运动产生的运功加速度，根据牛二定理，只要有外力作用，便产生加速度。加速度传感器测量的是这个加速度的总和。物体静止加速度计测量的就是重力加速度。</p>
+<h3 id="2-陀螺仪"><a href="#2-陀螺仪" class="headerlink" title="2.陀螺仪"></a>2.陀螺仪</h3><p>陀螺仪，没错，它就只叫陀螺仪，没有其他名字。<br>陀螺仪，顾名思义，你猜不出它是干嘛的也很正常。但是，现在你要记住了，陀螺仪可以用来测量物体的旋转角速度。</p>
+<p>我们小时候玩四驱车的时候，常说这个电机10000转每秒很牛逼，单位转/秒，那你怎么知道它10000转每秒，它这样写你就信了？如果我们有陀螺仪，把陀螺仪挂到电机轴上，那么陀螺仪测量的是旋转角速度，再除于三百六十度（一转）就可以知道这个电机转速了。实际上我们不会这样测转速-。 -，这里仅举个例子让你明白陀螺仪是干啥的。<br>陀螺仪利用了旋转坐标系中的物体会受到科里奥利力的原理。在陀螺仪中利用压电陶瓷做成振动单元，当旋转（陀螺仪）时会改变振动频率从而反映出物体旋转的角速度。<br>要获得角度，就需要对陀螺仪角速度进行积分Angle+ 。Angle是带有正负的，正值表示按正向旋转，负值表示按负向旋转。具体怎么定义正负方向，就得看你的运用了。<br><img src="https://img-blog.csdnimg.cn/20190521213442266.png" alt="在这里插入图片描述"><br>图5 MPU-6050方向正负示意图<br>由于从陀螺仪角速度获得角度信息，需要经过积分运算。如果角速度信号存在微小 的偏差和漂移，经过积分运算之后，变化形成积累误差。这个误差会随着时间延长逐步 增加，最终导致电路饱和，无法形成正确的角度信。如图6所示。<br><img src="https://img-blog.csdnimg.cn/20190521213555278.png" alt="在这里插入图片描述"><br>为什么要用加速度计和陀螺仪两个传感器？<br>        似乎只需要加速度传感器就可以获得车模的倾角，再对此角度值进行微分便可以获得倾角速度。但在实际车体运行过程中，由于车体本身的摆动所产生的加速度会产生很大的干扰信号，它叠加在上述测量信号上使得输出信号无法准确反映车体的倾角，如图7所示。<br><img src="https://img-blog.csdnimg.cn/20190521213917201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNDQ0OTQ0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>图7 车体运动引起加速度信号波动</p>
+<p>由于陀螺仪输出的是车体的角速度，不会受到车体运动的影响，因此该信号中噪声很小。车体的角度又是通过对角速度积分而得，这可进一步平滑信号，从而使得角度信号更加稳定。因此车模控制所需要的角度和角速度可以使用陀螺仪所得到的信号。</p>
+<p>由于从陀螺仪角速度获得角度信息，需要经过积分运算。如果角速度信号存在微小的偏差和漂移，经过积分运算之后，变化形成积累误差。这个误差会随着时间延长逐步增加，最终导致电路饱和，无法形成正确的角度信号，如图8所示。<br><img src="https://img-blog.csdnimg.cn/20190521214033402.png" alt="在这里插入图片描述"><br>图8 陀螺仪积分误差</p>
+<p>如何消除陀螺仪的累积误差呢？</p>
+<p>一种简单的方法就是通过加速度传感器获得的角度信息对此进行校正。通过对比陀螺仪积分所得到的角度与重力加速度所得到的角度，使用它们之间的偏差改变陀螺仪的输出，从而积分的角度逐步跟踪到加速度传感器所得到的角度。</p>
+<p>一言蔽之，陀螺仪噪声很小，角速度数据精准，通过积分得到角度，但是长期积分会产生累积误差，需要加速度传感器来校正此误差，获得正确的姿态数据。</p>
+<p>转自：<br><a href="https://miaowlabs.com/book/MWbalanced/why-accel-gyro.html" target="_blank" rel="noopener">https://miaowlabs.com/book/MWbalanced/why-accel-gyro.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">电子模块</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/22/陀螺仪和加速度传感器/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-机智云学习之旅" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -333,107 +418,6 @@ var _hmt = _hmt || [];
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/05/26/欢迎使用CSDN-markdown编辑器/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-pid控制入门笔记（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/26/pid控制入门笔记（1）/">pid控制算法入门笔记（一）</a>
-    </h1>
-  
-
-        
-        <a href="/2017/05/26/pid控制入门笔记（1）/" class="archive-article-date">
-  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="PID控制器"><a href="#PID控制器" class="headerlink" title="PID控制器"></a>PID控制器</h1><h4 id="最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念"><a href="#最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念" class="headerlink" title="最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念"></a>最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念</h4><p>PID控制器（比例-积分-微分控制器），由比例单元（P）、积分单元（I）和微分单元（D）组成[1]。可以透过调整这三个单元的增益Kp，Ki和Kd来调定其特性。PID控制器主要适用于基本上线性，且动态特性不随时间变化的系统。</p>
-<p>PID控制器的方块图<br>PID控制器是一个在工业控制应用中常见的反馈回路部件。这个控制器把收集到的数据和一个参考值进行比较，然后把这个差别用于计算新的输入值，这个新的输入值的目的是可以让系统的数据达到或者保持在参考值。PID控制器可以根据历史数据和差别的出现率来调整输入值，使系统更加准确而稳定。</p>
-<p>PID控制器的比例单元(P)、积分单元(I)和微分单元(D)分别对应目前误差、过去累计误差及未来误差。若是不知道受控系统的特性，一般认为PID控制器是最适用的控制器[2]。借由调整PID控制器的三个参数，可以调整控制系统，设法满足设计需求。控制器的响应可以用控制器对误差的反应快慢、控制器过冲的程度及系统震荡的程度来表示。不过使用PID控制器不一定保证可达到系统的最佳控制，也不保证系统稳定性。</p>
-<p>有些应用只需要PID控制器的部分单元，可以将不需要单元的参数设为零即可。因此PID控制器可以变成PI控制器、PD控制器、P控制器或I控制器。其中又以PI控制器比较常用，因为D控制器对回授噪声十分敏感，而若没有I控制器的话，系统不会回到参考值，会存在一个误差量。<br>图片: <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Pid-feedback-nct-int-correct.png/1280px-Pid-feedback-nct-int-correct.png" alt="Alt"></p>
-<h3 id="下面是从github上找的一个实例："><a href="#下面是从github上找的一个实例：" class="headerlink" title="下面是从github上找的一个实例："></a>下面是从github上找的一个实例：</h3><p>不过时stm32开发板，是用C语言写的：<br>作为一个入门参考吧<br>以STM32单片机为控制器，舵机为执行器，摄像头为检测仪表（测量元件）的并基于积分分离算法的板球控制系统，实现对小球在平板上精确定位的控制功能</p>
-<p>确定系统方案：<br>1.确定控制目标，选择被控变量<br>    实现滚球在平板上的定位。被控变量选择滚球在平板上的坐标<br>2.选择测量参数与测量仪表<br>    测量参数为滚球在平板上的坐标。<br>    测量仪表：选择摄像头<br>        原因：检测成本低，控制质量要求在可接受范围内，  对于平板的长宽，摄像头量程基本满足需要，可靠性较低<br>    检测工作原理：像素获取，（未进行滤波操作）直接二值化，小球轮廓检测，获取小球中心<br>    检测小球位置的算法：<br>        通过遍历，寻找小球的上下左右四个顶点位置，求小球质心位置<br>    检测参数的滤波处理操作：<br>        比赛中，无，直接进行图像二值化处理，图像在获取和传输时容易产生噪声，影响目标特征的准确性，阈值人为选择，容易受到光线的干扰，比赛时使用台灯进行补光操作。应该进行图像处理<br>    测量误差 60cm/320 = 1.8mm  60cm/240  = 2.5mm  题目给出小球圆边界与最大范围圆边界有15mm的允许误差，满足精度要求，对控制要求较高<br>3.操作变量的选择与主要扰动的分析<br>操作变量：平板的俯仰角和横滚角。<br>扰动变量：光源对于平板的漫反射<br>4.操作变量与被控变量的配对<br>   在本比赛中无需考虑，比较明显能够找到，其他变量对于被控变量的增益都过小<br>5.控制方案与控制算法的选择<br>    控制方案：最简单的单回路控制    or  串级控制  选择单回路控制<br>    控制算法：积分分离的PID算法<br>       测量值与设定值之间的偏差超出某一个阈值，使用PD算法，在阈值范围之内加入积分效果<br>       control value = last controled value + P <em> error + flag </em> I <em> error integral value + d </em> (now error - last error)<br>6.执行器的选型<br>    根据操作变量的工艺条件以及对执行器位移特性的要求的选择<br>    选择控制变量与操作变量线性度较好的舵机<br>   驱动舵机功率放大电路：</p>
-<p>7.控制系统的现场安装、调试<br>    检查和调整个控制仪表和设备的工作状况。<br>    执行器是舵机的时候工作在合理电压下才会满足线性特性<br>    控制器参数整定过程：临界振荡法</p>
-<p>控制算法：<br>摄像头检测：小球运动检测及处理<br>舵机驱动电路：<br>测试方法：<br>测试结果分析：</p>
-<p>遇到的情况及解决方法：</p>
-<p>1.常规PID 控制系统长时间震荡？<br>大幅度提降设定值，解决方法是积分分离算法，</p>
-<p>2.存在外部扰动，尤其是外部光源<br>使用可调节亮度的台灯进行补光，并且将平台通过<br>显示屏显示出来</p>
-<p>3.摄像头无法完整覆盖整个平板<br>通过适当的太高摄像头，牺牲一部分小球位置精确度。</p>
-<p>4.舵机无法准确驱动，控制变量与操作变量不成线性关系<br>测量电池电压，发现电压过低，更换电池</p>
-<p>5.摄像头采样率（帧数） 测量滞后现象<br>实际效果还可以，30帧的采样率<br>滞后会影响系统稳定性，系统相位裕度会减小</p>
-<p>6.物理元件的死区和饱和的现象怎么解决，运动范围<br>通过限幅</p>
-<p>7.被控对象是一个非线性系统，你是如何控制的<br>    通过反馈，可以将被控对象视作黑箱，非线性系统可以使用PID去控制被控对象</p>
-<p>8.调试PID 参数问题，系统一直得不到临界震荡的效果或者震荡不明显？<br>使用的临界比例度法，他适用于系统时间常数较小的情况。  时间常数较大下，纯比例作用下会很稳定<br>改进：增长执行器舵机的舵臂，提升广义对象系统的响应性能，<br>临界比例度法：先去掉积分和微分部分，将P值逐渐增大到系统临界震荡，然后加入积分，对P适当缩小<br>转自：<br><a href="https://github.com/xiaohongxiao/ball_rolling_control_system" target="_blank" rel="noopener">https://github.com/xiaohongxiao/ball_rolling_control_system</a><br>1Z实验室<br>：<br><img src="https://avatars1.githubusercontent.com/u/41182635?s=200&amp;v=4" alt="Alt"><br>这个网址上由一些关于pid和图形识别的教程：<br>今天就到这了，未完待续…..</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/05/26/pid控制入门笔记（1）/">展开全文 >></a>
         </p>
       
 
@@ -657,6 +641,107 @@ categories: 技术</code><ul>
 
 
   
+    <article id="post-pid控制入门笔记（1）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/26/pid控制入门笔记（1）/">pid控制算法入门笔记（一）</a>
+    </h1>
+  
+
+        
+        <a href="/2017/05/26/pid控制入门笔记（1）/" class="archive-article-date">
+  	<time datetime="2017-05-26T11:57:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="PID控制器"><a href="#PID控制器" class="headerlink" title="PID控制器"></a>PID控制器</h1><h4 id="最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念"><a href="#最近发现要老师让熟悉一下pid-比赛时候可能用到，然后我就去百科上找到了pid的概念" class="headerlink" title="最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念"></a>最近发现要老师让熟悉一下pid,比赛时候可能用到，然后我就去百科上找到了pid的概念</h4><p>PID控制器（比例-积分-微分控制器），由比例单元（P）、积分单元（I）和微分单元（D）组成[1]。可以透过调整这三个单元的增益Kp，Ki和Kd来调定其特性。PID控制器主要适用于基本上线性，且动态特性不随时间变化的系统。</p>
+<p>PID控制器的方块图<br>PID控制器是一个在工业控制应用中常见的反馈回路部件。这个控制器把收集到的数据和一个参考值进行比较，然后把这个差别用于计算新的输入值，这个新的输入值的目的是可以让系统的数据达到或者保持在参考值。PID控制器可以根据历史数据和差别的出现率来调整输入值，使系统更加准确而稳定。</p>
+<p>PID控制器的比例单元(P)、积分单元(I)和微分单元(D)分别对应目前误差、过去累计误差及未来误差。若是不知道受控系统的特性，一般认为PID控制器是最适用的控制器[2]。借由调整PID控制器的三个参数，可以调整控制系统，设法满足设计需求。控制器的响应可以用控制器对误差的反应快慢、控制器过冲的程度及系统震荡的程度来表示。不过使用PID控制器不一定保证可达到系统的最佳控制，也不保证系统稳定性。</p>
+<p>有些应用只需要PID控制器的部分单元，可以将不需要单元的参数设为零即可。因此PID控制器可以变成PI控制器、PD控制器、P控制器或I控制器。其中又以PI控制器比较常用，因为D控制器对回授噪声十分敏感，而若没有I控制器的话，系统不会回到参考值，会存在一个误差量。<br>图片: <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Pid-feedback-nct-int-correct.png/1280px-Pid-feedback-nct-int-correct.png" alt="Alt"></p>
+<h3 id="下面是从github上找的一个实例："><a href="#下面是从github上找的一个实例：" class="headerlink" title="下面是从github上找的一个实例："></a>下面是从github上找的一个实例：</h3><p>不过时stm32开发板，是用C语言写的：<br>作为一个入门参考吧<br>以STM32单片机为控制器，舵机为执行器，摄像头为检测仪表（测量元件）的并基于积分分离算法的板球控制系统，实现对小球在平板上精确定位的控制功能</p>
+<p>确定系统方案：<br>1.确定控制目标，选择被控变量<br>    实现滚球在平板上的定位。被控变量选择滚球在平板上的坐标<br>2.选择测量参数与测量仪表<br>    测量参数为滚球在平板上的坐标。<br>    测量仪表：选择摄像头<br>        原因：检测成本低，控制质量要求在可接受范围内，  对于平板的长宽，摄像头量程基本满足需要，可靠性较低<br>    检测工作原理：像素获取，（未进行滤波操作）直接二值化，小球轮廓检测，获取小球中心<br>    检测小球位置的算法：<br>        通过遍历，寻找小球的上下左右四个顶点位置，求小球质心位置<br>    检测参数的滤波处理操作：<br>        比赛中，无，直接进行图像二值化处理，图像在获取和传输时容易产生噪声，影响目标特征的准确性，阈值人为选择，容易受到光线的干扰，比赛时使用台灯进行补光操作。应该进行图像处理<br>    测量误差 60cm/320 = 1.8mm  60cm/240  = 2.5mm  题目给出小球圆边界与最大范围圆边界有15mm的允许误差，满足精度要求，对控制要求较高<br>3.操作变量的选择与主要扰动的分析<br>操作变量：平板的俯仰角和横滚角。<br>扰动变量：光源对于平板的漫反射<br>4.操作变量与被控变量的配对<br>   在本比赛中无需考虑，比较明显能够找到，其他变量对于被控变量的增益都过小<br>5.控制方案与控制算法的选择<br>    控制方案：最简单的单回路控制    or  串级控制  选择单回路控制<br>    控制算法：积分分离的PID算法<br>       测量值与设定值之间的偏差超出某一个阈值，使用PD算法，在阈值范围之内加入积分效果<br>       control value = last controled value + P <em> error + flag </em> I <em> error integral value + d </em> (now error - last error)<br>6.执行器的选型<br>    根据操作变量的工艺条件以及对执行器位移特性的要求的选择<br>    选择控制变量与操作变量线性度较好的舵机<br>   驱动舵机功率放大电路：</p>
+<p>7.控制系统的现场安装、调试<br>    检查和调整个控制仪表和设备的工作状况。<br>    执行器是舵机的时候工作在合理电压下才会满足线性特性<br>    控制器参数整定过程：临界振荡法</p>
+<p>控制算法：<br>摄像头检测：小球运动检测及处理<br>舵机驱动电路：<br>测试方法：<br>测试结果分析：</p>
+<p>遇到的情况及解决方法：</p>
+<p>1.常规PID 控制系统长时间震荡？<br>大幅度提降设定值，解决方法是积分分离算法，</p>
+<p>2.存在外部扰动，尤其是外部光源<br>使用可调节亮度的台灯进行补光，并且将平台通过<br>显示屏显示出来</p>
+<p>3.摄像头无法完整覆盖整个平板<br>通过适当的太高摄像头，牺牲一部分小球位置精确度。</p>
+<p>4.舵机无法准确驱动，控制变量与操作变量不成线性关系<br>测量电池电压，发现电压过低，更换电池</p>
+<p>5.摄像头采样率（帧数） 测量滞后现象<br>实际效果还可以，30帧的采样率<br>滞后会影响系统稳定性，系统相位裕度会减小</p>
+<p>6.物理元件的死区和饱和的现象怎么解决，运动范围<br>通过限幅</p>
+<p>7.被控对象是一个非线性系统，你是如何控制的<br>    通过反馈，可以将被控对象视作黑箱，非线性系统可以使用PID去控制被控对象</p>
+<p>8.调试PID 参数问题，系统一直得不到临界震荡的效果或者震荡不明显？<br>使用的临界比例度法，他适用于系统时间常数较小的情况。  时间常数较大下，纯比例作用下会很稳定<br>改进：增长执行器舵机的舵臂，提升广义对象系统的响应性能，<br>临界比例度法：先去掉积分和微分部分，将P值逐渐增大到系统临界震荡，然后加入积分，对P适当缩小<br>转自：<br><a href="https://github.com/xiaohongxiao/ball_rolling_control_system" target="_blank" rel="noopener">https://github.com/xiaohongxiao/ball_rolling_control_system</a><br>1Z实验室<br>：<br><img src="https://avatars1.githubusercontent.com/u/41182635?s=200&amp;v=4" alt="Alt"><br>这个网址上由一些关于pid和图形识别的教程：<br>今天就到这了，未完待续…..</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/05/26/pid控制入门笔记（1）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
@@ -754,19 +839,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">python基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">建站</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
+                <a href="javascript:void(0)" class="js-tag color4">python基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -774,11 +851,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+                <a href="javascript:void(0)" class="js-tag color4">机智云</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">建站</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
               </li>
              
               <li class="article-tag-list-item">
