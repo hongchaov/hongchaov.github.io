@@ -166,6 +166,97 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-改变图片每个像素点每个通道的灰度值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/02/改变图片每个像素点每个通道的灰度值/">改变图片每个像素点每个通道的灰度值</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/02/改变图片每个像素点每个通道的灰度值/" class="archive-article-date">
+  	<time datetime="2019-06-02T06:27:04.744Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>（一）</p>
+<p>代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#遍历访问图片每个像素点，并修改相应的RGB</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line">def access_pixels(image):</span><br><span class="line">    print(image.shape)</span><br><span class="line">    height = image.shape[<span class="number">0</span>]</span><br><span class="line">    width = image.shape[<span class="number">1</span>]</span><br><span class="line">    channels = image.shape[<span class="number">2</span>]</span><br><span class="line">    print(<span class="string">"width: %s  height: %s  channels: %s"</span>%(width, height, channels))</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> range(height):</span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> range(width):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> range(channels):</span><br><span class="line">                pv = image[row , col, c]        #获取每个像素点的每个通道的数值</span><br><span class="line">                image[row, col, c]=255 - pv     #灰度值是0-255   这里是修改每个像素点每个通道灰度值</span><br><span class="line">    cv.imshow(<span class="string">"second_image"</span>,image)</span><br><span class="line">src=cv.imread('E:\imageload\example.png')   #blue, green, red</span><br><span class="line">cv.namedWindow(<span class="string">'first_image'</span>, cv.WINDOW_AUTOSIZE)</span><br><span class="line">cv.imshow(<span class="string">'first_image'</span>, src)</span><br><span class="line">t1 = cv.getTickCount()    #GetTickcount函数返回从操作系统启动到当前所经过的毫秒数</span><br><span class="line">access_pixels(src)</span><br><span class="line">t2 = cv.getTickCount()</span><br><span class="line">time = (t2-t1)/cv.getTickFrequency()  #getTickFrequency函数返回CPU的频率,就是每秒的计时周期数</span><br><span class="line">print("time : %s ms"%(time*1000) )    #输出运行时间</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure></p>
+<p>图片: <img src="https://images2018.cnblogs.com/blog/1327126/201805/1327126-20180506150623140-85954947.png" alt="Alt"><br>图片: <img src="https://images2018.cnblogs.com/blog/1327126/201805/1327126-20180506151222079-690544940.png" alt="Alt"><br>（二）</p>
+<p>上述代码实现像素取反的运行时间较长，下面代码运用opencv自带的库函数可以使运行时间大大减少。</p>
+<p>代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#调用opencv的库函数快速实现像素取反</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line">def inverse(img):</span><br><span class="line">    img = cv.bitwise_not(img)   #函数cv.bitwise_not可以实现像素点各通道值取反</span><br><span class="line">    cv.imshow(<span class="string">"second_image"</span>, img)</span><br><span class="line"></span><br><span class="line">src=cv.imread('E:\imageload\example.png')   #blue, green, red</span><br><span class="line">cv.namedWindow(<span class="string">'first_image'</span>, cv.WINDOW_AUTOSIZE)</span><br><span class="line">cv.imshow(<span class="string">'first_image'</span>, src)</span><br><span class="line">t1 = cv.getTickCount()    #GetTickcount函数返回从操作系统启动到当前所经过的毫秒数</span><br><span class="line">inverse(src)</span><br><span class="line">t2 = cv.getTickCount()</span><br><span class="line">time = (t2-t1)/cv.getTickFrequency()  #getTickFrequency函数返回CPU的频率,就是每秒的计时周期数</span><br><span class="line">print("time : %s ms"%(time*1000) )    #输出运行时间</span><br><span class="line">cv.waitKey(<span class="number">0</span>)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure></p>
+<p>图片: <img src="https://images2018.cnblogs.com/blog/1327126/201805/1327126-20180506214110199-1305370002.png" alt="Alt"></p>
+<p>转自<a href="https://www.cnblogs.com/FHC1994/p/8998337.html" target="_blank" rel="noopener">https://www.cnblogs.com/FHC1994/p/8998337.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python opencv</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/python//" class="article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/02/改变图片每个像素点每个通道的灰度值/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-python从入门到精通第九章（类）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -996,83 +1087,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-板球控制系统pid笔记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/22/板球控制系统pid笔记/">pid板球系统的一些问题</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/22/板球控制系统pid笔记/" class="archive-article-date">
-  	<time datetime="2019-05-22T03:30:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>整个板球系统分为两个部分：</p>
-<p>1.图像处理：</p>
-<p>图像处理利用了树莓派-OpenCV进行图像处理，将小球坐标进行实时反馈，使小球实际坐标和目标坐标进行对比，对偏差进行pid运算，计算出pwm值从而用来控制舵机。</p>
-<p>图像处理的难点在于：<br>（1）怎么读取小球的坐标，可以利用面积法，将镜像中的面积小于一个值的物体提取出来（也可以根据颜色识别，不过这个对小球颜色要求很高，不能反光）<br>（2）难点2在于树莓派和单片机的通信，如何将坐标传给单片机，可以利用的是串口通信，将树莓派的坐标加上帧头帧尾，然后在单片机这边进行解码，就可以在单片机上面读取到小球的实时坐标。<br>2.pid的计算<br>pid运算是仿照着上个项目做的直流电机的调速系统的位置环写的，通过这个项目我发现了历年电赛好多共同点，板球系统，倒立摆，激光打靶的原理都是一样的，只不过是反馈的方式发生了变化而已，所以做这些项目的前提一定是将反馈的信号准确读取，这个是系统稳定工作的前提。<br>说一下做的时候遇到的一个问题，小球到达二号位置时，本来是在位置停止3秒再到5号位置，但是实际却是到达三号位置时，程序一直卡死，找原因找了很久才发现延时的时候程序跳不出来，一直在延时循环，  无奈最后自己写了一个延时函数  没有用HAL库里面的延时函数。<br>图片: <img src="https://img-blog.csdn.net/20180709132543265?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JpdWJpdWJpdWJpdTIzMw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>转自:<br><a href="https://blog.csdn.net/biubiubiubiu233/article/details/80968096" target="_blank" rel="noopener">https://blog.csdn.net/biubiubiubiu233/article/details/80968096</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/22/板球控制系统pid笔记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1170,10 +1184,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">python基础</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">pid控制</a>
               </li>
              
@@ -1182,7 +1192,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+                <a href="javascript:void(0)" class="js-tag color4">python基础</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1190,15 +1200,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">python opencv</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">机智云</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">软件安装</a>
+                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">电子模块</a>
+                <a href="javascript:void(0)" class="js-tag color5">软件安装</a>
               </li>
             
             <div class="clearfix"></div>
