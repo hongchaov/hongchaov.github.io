@@ -166,6 +166,92 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-使用Numpy创建纯色图片" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/02/使用Numpy创建纯色图片/">使用Numpy创建纯色图片</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/02/使用Numpy创建纯色图片/" class="archive-article-date">
+  	<time datetime="2019-06-02T15:53:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>先前读取图片信息的时候opencv读到的图片数据格式是numpy</p>
+<p>那就意味着可以通过numpy来创建一个图片</p>
+<p>如果电脑上没有numpy的话需要先装一下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install numpy</span><br></pre></td></tr></table></figure></p>
+<p>可以通过numpy的zeros来创建一个空数组<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">def create_image():</span><br><span class="line">    img = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)</span><br><span class="line">    cv.imshow(<span class="string">"iamge"</span>, img)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">create_image()</span><br></pre></td></tr></table></figure></p>
+<p>看到的效果是：<br>图片: <img src="https://img-blog.csdn.net/20180718212656243?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dza3VsbA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>乌漆嘛黑的一片，因为zeros创建的数组都是0</p>
+<p>像素点的每个颜色都是0的话那就是乌漆嘛黑一片了</p>
+<p>反之每个像素点都是255的话就是一张白色的图片</p>
+<p>我皮了下，试了几种方法，代码如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">def create_image():</span><br><span class="line">    img = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)</span><br><span class="line">    img[:, :, <span class="number">0</span>] = np.zeros([<span class="number">400</span>, <span class="number">400</span>]) + <span class="number">255</span></span><br><span class="line">    img[:, :, <span class="number">1</span>] = np.ones([<span class="number">400</span>, <span class="number">400</span>]) + <span class="number">254</span></span><br><span class="line">    img[:, :, <span class="number">2</span>] = np.ones([<span class="number">400</span>, <span class="number">400</span>]) * <span class="number">255</span></span><br><span class="line">    cv.imshow(<span class="string">"iamge"</span>, img)</span><br><span class="line">    img2 = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)+<span class="number">255</span></span><br><span class="line">    cv.imshow(<span class="string">"iamge2"</span>, img2)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">create_image()</span><br></pre></td></tr></table></figure></p>
+<p>效果如图<br>图片: <img src="https://img-blog.csdn.net/20180718213415732?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dza3VsbA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>出来的效果都是白色</p>
+<p>以前提到过opencv的通道顺序是GBR，那我们现在也可以测试下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def create_image_channel():</span><br><span class="line">    img_green = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)</span><br><span class="line">    img_green[:, :, <span class="number">0</span>] = np.zeros([<span class="number">400</span>, <span class="number">400</span>]) + <span class="number">255</span></span><br><span class="line">    cv.imshow(<span class="string">"iamge_green"</span>, img_green)</span><br><span class="line">    img_blue = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)</span><br><span class="line">    img_blue[:, :, <span class="number">1</span>] = np.zeros([<span class="number">400</span>, <span class="number">400</span>]) + <span class="number">255</span></span><br><span class="line">    cv.imshow(<span class="string">"iamge_blue"</span>, img_blue)</span><br><span class="line">    img_red = np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">3</span>], np.uint8)</span><br><span class="line">    img_red[:, :, <span class="number">2</span>] = np.zeros([<span class="number">400</span>, <span class="number">400</span>])+ <span class="number">255</span></span><br><span class="line">    cv.imshow(<span class="string">"iamge_red"</span>, img_red)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">create_image_channel()</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br>图片: <img src="https://img-blog.csdn.net/20180718214020406?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dza3VsbA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>有没有一种破解三星手机时的既视感？</p>
+<p>有三通道的图片那我们同样可以初始化一个单通道的，也就是一个灰度图<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def create_image_gray():</span><br><span class="line">    img_gray= np.zeros([<span class="number">400</span>, <span class="number">400</span>, <span class="number">1</span>], np.uint8)</span><br><span class="line">    img_gray[:, :, <span class="number">0</span>] = np.zeros([<span class="number">400</span>, <span class="number">400</span>]) + <span class="number">127</span></span><br><span class="line">    cv.imshow(<span class="string">"img_gray"</span>, img_gray)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line"> </span><br><span class="line">create_image_gray()</span><br></pre></td></tr></table></figure></p>
+<p>效果<br>图片: <img src="https://img-blog.csdn.net/20180718214419471?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0dza3VsbA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Alt"><br>原文链接：<br><a href="https://blog.csdn.net/Gskull/article/details/81105627" target="_blank" rel="noopener">https://blog.csdn.net/Gskull/article/details/81105627</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">python opencv</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/02/使用Numpy创建纯色图片/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-改变图片每个像素点每个通道的灰度值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1000,93 +1086,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-电子设计大赛-板球系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/22/电子设计大赛-板球系统/">电子设计大赛-板球控制系统</a>
-    </h1>
-  
-
-        
-        <a href="/2019/05/22/电子设计大赛-板球系统/" class="archive-article-date">
-  	<time datetime="2019-05-22T05:01:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是我参加电赛的作品，与李庆生、陈勃翰组队，他们俩负责材料采购、机械设计、平台搭建等，我负责代码部分的编写，最终获得北京市二等奖。</p>
-<p>题目是板球系统设计，板球系统即为：在一个正方形板上放置一个小球，控制板的倾斜来使小球在不落下的前提下做规定动作。</p>
-<p>要想控制小球，首先要获取小球的实时位置，这里最简单的方法就是DCMI摄像头。但是我们电赛前并没有准备摄像头。。。看着其他组直接拿出早已买好的鹰眼摄像头我们有点慌了，但是比赛只有3天，不能拖了。最后我当机立断，放弃直接用STM32+DCMI摄像头的方式，改为用树莓派+USB摄像头，于是乎把我在宿舍墙上挂了半年的树莓派卸了下来。。。再去超市买了个USB摄像头。这时又出现一个问题，既然都用树莓派了，那还要不要STM32？从功能上讲，树莓派足以胜任一切，时间和技术上也没问题，但是从比赛规则和传统来说，电赛这种比赛好像一般都是用51、AVR、STM32这种单片机的吧，这时候你突然用一个装着LINUX操作系统的东西，就感觉有点犯规。。。所以为了求稳不被判犯规，我们保留了STM32作为主控制器，树莓派就只作为图像处理部分，树莓派和STM32之间用串口通讯。</p>
-<p>于是我们的最终方案设计为树莓派+STM32：</p>
-<ul>
-<li>板子选择较轻的纸板，涂上白色颜料，小球涂上黑色颜料，对比强烈一些好让程序分辨。</li>
-<li>树莓派中，使用OPENCV将USB摄像头获取的图像转化为灰度图，并经由高斯滤波、霍夫圆等处理获取图像中出现的圆形，再根据位置和大小的限定条件进行筛选，确定小球的位置，通过串口发送至STM32。</li>
-<li>用STM32完成整个系统的控制，采用双环PID算法，内环为角度环，控制板子的倾斜角，外环为位置环，控制小球在纸板上的位置。</li>
-<li>机械结构采用分别在X、Y轴的两个直流电机，加上橡皮绳（陈勃翰同学搞到的，我也不知道该叫什么）制作的，由陈勃翰设计。</li>
-<li>采用12864屏幕显示一些系统信息，比如第几动作、小球坐标等。<br>github:<a href="https://github.com/plutojia/Ball-Plate-System" target="_blank" rel="noopener">https://github.com/plutojia/Ball-Plate-System</a></li>
-</ul>
-<p>因为当时走的比较着急，都没来得及拍视频和照片。。到了把系统拆了一半的时候才想起来拍几张照片留个纪念。以下是一些遗迹照片：</p>
-<p><img src="https://img-blog.csdn.net/20180709204934949?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdn.net/20180709204945611?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"></p>
-<h2 id><a href="#" class="headerlink" title=" "></a> <img src="https://img-blog.csdn.net/20180709205011784?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pbmd6aGlxaW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="在这里插入图片描述"></h2><p>作者：plutojia<br>来源：CSDN<br>原文：<a href="https://blog.csdn.net/mingzhiqing/article/details/80977145" target="_blank" rel="noopener">https://blog.csdn.net/mingzhiqing/article/details/80977145</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pid控制</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/22/电子设计大赛-板球系统/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1188,7 +1187,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
+                <a href="javascript:void(0)" class="js-tag color4">python opencv</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1200,11 +1199,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">python opencv</a>
+                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">问题故障</a>
+                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
               </li>
              
               <li class="article-tag-list-item">
